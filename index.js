@@ -15,24 +15,24 @@ const pagesDir = __dirname + '/pages/';
 const routes = [
 	{
 		path: '/',
-		file: 'index.html'
+		file: 'index'
 	},
 	{
 		path: '/about',
-		file: 'about.html'
+		file: 'about'
 	},
 	{
 		path: '/contact',
-		file: 'contact.html'
+		file: 'contact'
 	},
 	{
 		path: '/post',
-		file: 'post.html'
+		file: 'post'
 	}
 ];
 
 for (let route of routes) {
 	app.get(route.path, (req, res) => {
-		res.sendFile(path.resolve(pagesDir, route.file));
+		res.render(route.file);
 	});
 }
