@@ -1,36 +1,21 @@
-const http = require('http');
-const fs = require('fs');
-const server = http.createServer((req, res) => {
-	const pages = [{
-			url: ['/', '/index'],
-			file: fs.readFileSync('./pages/index.html')
-		},
-		{
-			url: '/about',
-			file: fs.readFileSync('./pages/about.html')
-		},
-		{
-			url: '/contact',
-			file: fs.readFileSync('./pages/contact.html')
-		},
-		{
-			url: '*',
-			file: fs.readFileSync('./pages/not-found.html')
-		}
-	];
-	let currentPage = pages.find((p) => {
-		if (Array.isArray(p.url)) {
-			let url = p.url.find((u) => u === req.url)
-			return url !== undefined
-		} else {
-			return p.url === req.url
-		}
-	});
-	if (currentPage !== undefined) {
-		res.end(currentPage.file);
-	} else {
-		res.writeHead(404);
-		res.end(pages.find((p)=>p.url === '*').file);
-	}
+const express = require('express');
+const app = express();
+const path = require('path');
+
+app.listen(3000, () => {
+	console.log('Listening on port 3000');
 });
-server.listen(3000);
+
+const pagesDir = __dirname + '/pages/';
+
+app.get(['/', '/index'], (req, res) => {
+	res.sendFile(path.resolve(pagesDir, 'index.html'));
+});
+
+app.get('/about', (req, res) => {
+	res.sendFile(path.resolve(pagesDir, 'about.html'));
+});
+
+app.get('/contact', (req, res) => {
+	res.sendFile(path.resolve(pagesDir, 'contact.html'));
+});
